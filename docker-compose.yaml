@@ -1,0 +1,35 @@
+  version: "3.1"
+
+  services:
+    db:
+      image: postgres
+      container_name: db
+      restart: always
+      environment:
+        POSTGRES_USER: odoo
+        POSTGRES_PASSWORD: odoo
+        POSTGRES_DB: postgres
+      ports:
+        - "5433:5432"
+
+    odoo:
+      image: odoo:latest
+      container_name: odoo
+      depends_on:
+        - db
+      ports:
+        - "8200:8069"
+      environment:
+        - HOST=db
+        - USER=odoo
+        - PASSWORD=odoo
+
+    pgadmin:
+      image: elestio/pgadmin:latest
+      container_name: pgadmin
+      restart: always
+      ports:
+        - "5050:80"
+      environment:
+        PGADMIN_DEFAULT_EMAIL: admin@admin.com
+        PGADMIN_DEFAULT_PASSWORD: admin
